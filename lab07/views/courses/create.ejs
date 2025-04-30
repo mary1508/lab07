@@ -1,0 +1,95 @@
+<div class="card">
+    <div class="card-body">
+        <form action="/courses" method="POST">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="curriculum" class="form-label">Plan de Estudios</label>
+                    <select class="form-select" id="curriculum" name="curriculum" required>
+                        <% Object.entries(curriculums).forEach(([value, label]) => { %>
+                            <option value="<%= value %>"><%= label %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="year" class="form-label">Año</label>
+                    <select class="form-select" id="year" name="year" required>
+                        <% Object.entries(years).forEach(([value, label]) => { %>
+                            <option value="<%= value %>"><%= label %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="semester" class="form-label">Semestre</label>
+                    <select class="form-select" id="semester" name="semester" required>
+                        <% Object.entries(semesters).forEach(([value, label]) => { %>
+                            <option value="<%= value %>"><%= label %></option>
+                        <% }); %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="code" class="form-label">Código</label>
+                    <input type="text" class="form-control" id="code" name="code" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="acronym" class="form-label">Acrónimo</label>
+                    <input type="text" class="form-control" id="acronym" name="acronym">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="credits" class="form-label">Créditos</label>
+                    <input type="number" step="0.01" class="form-control" id="credits" name="credits">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="theory_hours" class="form-label">Horas Teoría</label>
+                    <input type="number" step="0.01" class="form-control" id="theory_hours" name="theory_hours">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="practice_hours" class="form-label">Horas Práctica</label>
+                    <input type="number" step="0.01" class="form-control" id="practice_hours" name="practice_hours">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="laboratory_hours" class="form-label">Horas Laboratorio</label>
+                    <input type="number" step="0.01" class="form-control" id="laboratory_hours" name="laboratory_hours">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="laboratory" name="laboratory" value="1" checked>
+                        <label class="form-check-label" for="laboratory">Tiene Laboratorio</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
+                        <label class="form-check-label" for="status">Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="prerequisites" class="form-label">Prerrequisitos</label>
+                <select class="form-select" id="prerequisites" name="prerequisites" multiple>
+                    <% courses.forEach(course => { %>
+                        <option value="<%= course.id %>"><%= course.code %> - <%= course.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/courses" class="btn btn-secondary me-md-2">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

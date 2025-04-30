@@ -1,0 +1,63 @@
+<div class="card">
+    <div class="card-body">
+        <form action="/workloads" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="course_id" class="form-label">Curso</label>
+                    <select class="form-select" id="course_id" name="course_id" required>
+                        <option value="">Seleccione un curso</option>
+                        <% courses.forEach(course => { %>
+                            <option value="<%= course.id %>"><%= course.code %> - <%= course.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="teacher_id" class="form-label">Profesor</label>
+                    <select class="form-select" id="teacher_id" name="teacher_id" required>
+                        <option value="">Seleccione un profesor</option>
+                        <% teachers.forEach(teacher => { %>
+                            <option value="<%= teacher.id %>"><%= teacher.names %> <%= teacher.father_surname %> <%= teacher.mother_surname %></option>
+                        <% }); %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="group_name" class="form-label">Grupo</label>
+                    <select class="form-select" id="group_name" name="group_name" required>
+                        <% groups.forEach(group => { %>
+                            <option value="<%= group %>"><%= group %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="laboratory" class="form-label">Laboratorio</label>
+                    <select class="form-select" id="laboratory" name="laboratory" required>
+                        <% Object.entries(laboratories).forEach(([value, label]) => { %>
+                            <option value="<%= value %>"><%= label %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="capacity" class="form-label">Capacidad</label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" value="20" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
+                        <label class="form-check-label" for="status">Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/workloads" class="btn btn-secondary me-md-2">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

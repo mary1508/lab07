@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Estudiantes</h2>
+    <a href="/students/create" class="btn btn-success">Nuevo Estudiante</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>CUI</th>
+                <th>Nombres</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (students.length === 0) { %>
+                <tr>
+                    <td colspan="8" class="text-center">No hay estudiantes registrados</td>
+                </tr>
+            <% } else { %>
+                <% students.forEach(student => { %>
+                    <tr>
+                        <td><%= student.cui || '-' %></td>
+                        <td><%= student.names %></td>
+                        <td><%= student.father_surname %></td>
+                        <td><%= student.mother_surname %></td>
+                        <td><%= student.email || '-' %></td>
+                        <td><%= student.phone || '-' %></td>
+                        <td>
+                            <% if (student.status === 1) { %>
+                                <span class="badge bg-success">Activo</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Inactivo</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/students/edit/<%= student.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                <form action="/students/delete/<%= student.id %>" method="POST" onsubmit="return confirm('¿Está seguro de eliminar este estudiante?');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

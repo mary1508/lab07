@@ -1,0 +1,30 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.btn-group .btn {
+    margin-right: 5px;
+}
+
+.alert {
+    margin-bottom: 20px;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 20px;
+}
+
+.form-check-inline {
+    margin-top: 2rem;
+}

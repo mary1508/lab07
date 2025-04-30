@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Cursos</h2>
+    <a href="/courses/create" class="btn btn-success">Nuevo Curso</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Plan</th>
+                <th>Año</th>
+                <th>Semestre</th>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Acrónimo</th>
+                <th>Créditos</th>
+                <th>Laboratorio</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (courses.length === 0) { %>
+                <tr>
+                    <td colspan="10" class="text-center">No hay cursos registrados</td>
+                </tr>
+            <% } else { %>
+                <% courses.forEach(course => { %>
+                    <tr>
+                        <td><%= curriculums[course.curriculum] %></td>
+                        <td><%= years[course.year] %></td>
+                        <td><%= semesters[course.semester] %></td>
+                        <td><%= course.code %></td>
+                        <td><%= course.name %></td>
+                        <td><%= course.acronym %></td>
+                        <td><%= course.credits %></td>
+                        <td>
+                            <% if (course.laboratory === 1) { %>
+                                <span class="badge bg-success">Sí</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary">No</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (course.status === 1) { %>
+                                <span class="badge bg-success">Activo</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Inactivo</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/courses/edit/<%= course.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                <form action="/courses/delete/<%= course.id %>" method="POST" onsubmit="return confirm('¿Está seguro de eliminar este curso?');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

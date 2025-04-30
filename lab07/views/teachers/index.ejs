@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Profesores</h2>
+    <a href="/teachers/create" class="btn btn-success">Nuevo Profesor</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Mostrar Teléfono</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (teachers.length === 0) { %>
+                <tr>
+                    <td colspan="8" class="text-center">No hay profesores registrados</td>
+                </tr>
+            <% } else { %>
+                <% teachers.forEach(teacher => { %>
+                    <tr>
+                        <td><%= teacher.names %></td>
+                        <td><%= teacher.father_surname %></td>
+                        <td><%= teacher.mother_surname %></td>
+                        <td><%= teacher.email %></td>
+                        <td><%= teacher.phone || '-' %></td>
+                        <td>
+                            <% if (teacher.show_phone === 1) { %>
+                                <span class="badge bg-success">Sí</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary">No</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (teacher.status === 1) { %>
+                                <span class="badge bg-success">Activo</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Inactivo</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/teachers/edit/<%= teacher.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                <form action="/teachers/delete/<%= teacher.id %>" method="POST" onsubmit="return confirm('¿Está seguro de eliminar este profesor?');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Inscripciones para: <%= workload.course_name %> - Grupo <%= workload.group_name %></h2>
+    <div>
+        <a href="/inscriptions/create" class="btn btn-success me-2">Nueva Inscripción</a>
+        <a href="/workloads" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Detalles de la Carga de Trabajo</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Curso:</strong> <%= workload.course_code %> - <%= workload.course_name %></p>
+                <p><strong>Grupo:</strong> <%= workload.group_name %></p>
+                <p><strong>Laboratorio:</strong> <%= workload.laboratory %></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Profesor:</strong> <%= workload.teacher_names %> <%= workload.teacher_father_surname %> <%= workload.teacher_mother_surname %></p>
+                <p><strong>Capacidad:</strong> <%= workload.capacity %></p>
+                <p><strong>Inscritos:</strong> <%= inscriptions.length %></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>CUI</th>
+                <th>Estudiante</th>
+                <th>Fecha de Inscripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (inscriptions.length === 0) { %>
+                <tr>
+                    <td colspan="5" class="text-center">No hay inscripciones para esta carga de trabajo</td>
+                </tr>
+            <% } else { %>
+                <% inscriptions.forEach(inscription => { %>
+                    <tr>
+                        <td><%= inscription.cui || '-' %></td>
+                        <td><%= inscription.names %> <%= inscription.father_surname %> <%= inscription.mother_surname %></td>
+                        <td><%= new Date(inscription.created).toLocaleString() %></td>
+                        <td>
+                            <% if (inscription.status === 1) { %>
+                                <span class="badge bg-success">Activo</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Inactivo</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/inscriptions/edit/<%= inscription.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                <form action="/inscriptions/delete/<%= inscription.id %>" method="POST" onsubmit="return confirm('¿Está seguro de eliminar esta inscripción?');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

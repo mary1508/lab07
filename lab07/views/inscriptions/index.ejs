@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Inscripciones</h2>
+    <a href="/inscriptions/create" class="btn btn-success">Nueva Inscripción</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Curso</th>
+                <th>Grupo</th>
+                <th>Laboratorio</th>
+                <th>Fecha de Inscripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (inscriptions.length === 0) { %>
+                <tr>
+                    <td colspan="7" class="text-center">No hay inscripciones registradas</td>
+                </tr>
+            <% } else { %>
+                <% inscriptions.forEach(inscription => { %>
+                    <tr>
+                        <td><%= inscription.student_names %> <%= inscription.student_father_surname %></td>
+                        <td><%= inscription.course_code %> - <%= inscription.course_name %></td>
+                        <td><%= inscription.workload_group %></td>
+                        <td><%= inscription.workload_laboratory %></td>
+                        <td><%= new Date(inscription.created).toLocaleString() %></td>
+                        <td>
+                            <% if (inscription.status === 1) { %>
+                                <span class="badge bg-success">Activo</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Inactivo</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/inscriptions/edit/<%= inscription.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                <form action="/inscriptions/delete/<%= inscription.id %>" method="POST" onsubmit="return confirm('¿Está seguro de eliminar esta inscripción?');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

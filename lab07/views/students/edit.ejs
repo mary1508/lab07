@@ -1,0 +1,49 @@
+<div class="card">
+    <div class="card-body">
+        <form action="/students/update/<%= student.id %>" method="POST">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="cui" class="form-label">CUI</label>
+                    <input type="number" class="form-control" id="cui" name="cui" value="<%= student.cui %>">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="names" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="names" name="names" value="<%= student.names %>" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="father_surname" class="form-label">Apellido Paterno</label>
+                    <input type="text" class="form-control" id="father_surname" name="father_surname" value="<%= student.father_surname %>" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="mother_surname" class="form-label">Apellido Materno</label>
+                    <input type="text" class="form-control" id="mother_surname" name="mother_surname" value="<%= student.mother_surname %>" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<%= student.email %>">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="<%= student.phone %>">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="status" name="status" value="1" <%= student.status === 1 ? 'checked' : '' %>>
+                        <label class="form-check-label" for="status">Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/students" class="btn btn-secondary me-md-2">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+        </form>
+    </div>
+</div>

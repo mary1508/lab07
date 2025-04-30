@@ -1,0 +1,42 @@
+<div class="card">
+    <div class="card-body">
+        <form action="/inscriptions/update/<%= inscription.id %>" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="workload_id" class="form-label">Carga de Trabajo</label>
+                    <select class="form-select" id="workload_id" name="workload_id" required>
+                        <% workloads.forEach(workload => { %>
+                            <option value="<%= workload.id %>" <%= parseInt(inscription.workload_id) === parseInt(workload.id) ? 'selected' : '' %>>
+                                <%= workload.course_name %> - Grupo <%= workload.group_name %> (<%= workload.laboratory %>)
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="student_id" class="form-label">Estudiante</label>
+                    <select class="form-select" id="student_id" name="student_id" required>
+                        <% students.forEach(student => { %>
+                            <option value="<%= student.id %>" <%= parseInt(inscription.student_id) === parseInt(student.id) ? 'selected' : '' %>>
+                                <%= student.cui || 'Sin CUI' %> - <%= student.names %> <%= student.father_surname %> <%= student.mother_surname %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="status" name="status" value="1" <%= inscription.status === 1 ? 'checked' : '' %>>
+                        <label class="form-check-label" for="status">Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/inscriptions" class="btn btn-secondary me-md-2">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+        </form>
+    </div>
+</div>

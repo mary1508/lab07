@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista de Cargas de Trabajo</h2>
+    <a href="/workloads/create" class="btn btn-success">Nueva Carga de Trabajo</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Grupo</th>
+                <th>Laboratorio</th>
+                <th>Capacidad</th>
+                <th>Profesor</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (workloads.length === 0) { %>
+                <tr>
+                    <td colspan="7" class="text-center">No hay cargas de trabajo registradas</td>
+                </tr>
+            <% } else { %>
+                <% workloads.forEach(workload => { %>
+                    <tr>
+                        <td><%= workload.course_code %> - <%= workload.course_name %></td>
+                        <td><%= workload.group_name %></td>
+                        <td><%= laboratories[workload.laboratory] || workload.laboratory %></td>
+                        <td><%= workload.capacity %></td>
+                        <td><%= workload.teacher_names %> <%= workload.teacher_father_surname %></td>
+                        <td>
+                            <% if (workload.status === 1) { %>
+                                <span class="badge bg-success">Activo</span>
+                            <% } else { %>
+                                <span class="badge bg-danger">Inactivo</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/workloads/<%= workload.id %>/inscriptions" class="btn btn-sm btn-info">Inscripciones</a>
+                                <a href="/workloads/edit/<%= workload.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                <form action="/workloads/delete/<%= workload.id %>" method="POST" onsubmit="return confirm('¿Está seguro de eliminar esta carga de trabajo?');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>
