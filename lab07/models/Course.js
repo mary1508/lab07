@@ -1,167 +1,80 @@
-const db = require('../config/database');
-const { v4: uuidv4 } = require('uuid');
+import { DataTypes } from 'sequelize';
 
-class Course {
-    // Obtener todos los cursos
-    static getAll(callback) {
-        const sql = `SELECT * FROM course ORDER BY curriculum, year, semester, code, name`;
-        db.all(sql, [], (err, rows) => {
-            if (err) {
-                console.error('Error getting courses:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, rows);
-        });
+export default function(sequelize) {
+  const Course = sequelize.define('Course', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    curriculum: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 2017
+    },
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    semester: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    code: {
+      type: DataTypes.STRING(25),
+      unique: true,
+      allowNull: true
+    },
+    name: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      set(value) {
+        this.setDataValue('name', value.toUpperCase());
+      }
+    },
+    acronym: {
+      type: DataTypes.STRING(25),
+      allowNull: true,
+      set(value) {
+        if (value) {
+          this.setDataValue('acronym', value.toUpperCase());
+        }
+      }
+    },
+    credits: {
+      type: DataTypes.DECIMAL(4, 2),
+      allowNull: true
+    },
+    theory_hours: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: true
+    },
+    practice_hours: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: true
+    },
+    laboratory_hours: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: true
+    },
+    laboratory: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     }
+  }, {
+    tableName: 'courses',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'modified'
+  });
 
-    // Obtener un curso por ID
-    static getById(id, callback) {
-        const sql = `SELECT * FROM course WHERE id = ?`;
-        db.get(sql, [id], (err, row) => {
-            if (err) {
-                console.error('Error getting course by id:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, row);
-        });
-    }
-
-    // Crear un nuevo curso
-    static create(courseData, callback) {
-        const id = uuidv4();
-        const {
-            curriculum, year, semester, code, name, acronym, 
-            credits, theory_hours, practice_hours, laboratory_hours, 
-            laboratory = 1, status = 1
-        } = courseData;
-
-        // Convertir a mayúsculas
-        const uppercaseName = name ? name.toUpperCase() : null;
-        const uppercaseAcronym = acronym ? acronym.toUpperCase() : null;
-
-        const sql = `INSERT INTO course (
-            id, curriculum, year, semester, code, name, acronym, 
-            credits, theory_hours, practice_hours, laboratory_hours, 
-            laboratory, status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        const params = [
-            id, curriculum, year, semester, code, uppercaseName, uppercaseAcronym, 
-            credits, theory_hours, practice_hours, laboratory_hours, 
-            laboratory, status
-        ];
-
-        db.run(sql, params, function(err) {
-            if (err) {
-                console.error('Error creating course:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, { id, ...courseData, name: uppercaseName, acronym: uppercaseAcronym });
-        });
-    }
-
-    // Actualizar un curso
-    static update(id, courseData, callback) {
-        const {
-            curriculum, year, semester, code, name, acronym, 
-            credits, theory_hours, practice_hours, laboratory_hours, 
-            laboratory, status
-        } = courseData;
-
-        // Convertir a mayúsculas
-        const uppercaseName = name ? name.toUpperCase() : null;
-        const uppercaseAcronym = acronym ? acronym.toUpperCase() : null;
-
-        const sql = `UPDATE course SET 
-            curriculum = ?, 
-            year = ?, 
-            semester = ?, 
-            code = ?, 
-            name = ?, 
-            acronym = ?, 
-            credits = ?, 
-            theory_hours = ?, 
-            practice_hours = ?, 
-            laboratory_hours = ?, 
-            laboratory = ?, 
-            status = ?,
-            modified = CURRENT_TIMESTAMP
-            WHERE id = ?`;
-
-        const params = [
-            curriculum, year, semester, code, uppercaseName, uppercaseAcronym, 
-            credits, theory_hours, practice_hours, laboratory_hours, 
-            laboratory, status, id
-        ];
-
-        db.run(sql, params, function(err) {
-            if (err) {
-                console.error('Error updating course:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, { id, ...courseData, name: uppercaseName, acronym: uppercaseAcronym });
-        });
-    }
-
-    // Eliminar un curso
-    static delete(id, callback) {
-        const sql = `DELETE FROM course WHERE id = ?`;
-        db.run(sql, [id], function(err) {
-            if (err) {
-                console.error('Error deleting course:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, { id, deleted: this.changes });
-        });
-    }
-
-    // Agregar prerrequisito
-    static addPrerequisite(courseId, prerequisiteId, callback) {
-        const sql = `INSERT INTO prerequisites (course_id, prerequisite_id) VALUES (?, ?)`;
-        db.run(sql, [courseId, prerequisiteId], function(err) {
-            if (err) {
-                console.error('Error adding prerequisite:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, { courseId, prerequisiteId, added: true });
-        });
-    }
-
-    // Eliminar prerrequisito
-    static removePrerequisite(courseId, prerequisiteId, callback) {
-        const sql = `DELETE FROM prerequisites WHERE course_id = ? AND prerequisite_id = ?`;
-        db.run(sql, [courseId, prerequisiteId], function(err) {
-            if (err) {
-                console.error('Error removing prerequisite:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, { courseId, prerequisiteId, removed: true });
-        });
-    }
-
-    // Obtener prerrequisitos de un curso
-    static getPrerequisites(courseId, callback) {
-        const sql = `
-            SELECT c.* FROM course c
-            JOIN prerequisites p ON c.id = p.prerequisite_id
-            WHERE p.course_id = ?
-        `;
-        db.all(sql, [courseId], (err, rows) => {
-            if (err) {
-                console.error('Error getting prerequisites:', err.message);
-                callback(err, null);
-                return;
-            }
-            callback(null, rows);
-        });
-    }
-}
-
-module.exports = Course;
+  return Course;
+};
